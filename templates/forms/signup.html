@@ -1,1 +1,9 @@
 {% extends "../layouts/base.html" %}
+
+{% block title %}Sigunp{% endblock title %}
+
+{% block content %}
+    <form action="{% url 'signup' %}" method="post">
+        {{form.as_p}}
+    </form>
+{% endblock content %}
