@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+
+    {% endblock head %}
+    <title> Emarket | {% block title %}{% endblock title %}</title>
+</head>
+<body>
+    <header>
+        {% block header %}
+            {% include "./partials/menu.html" %}
+        {% endblock header %}
+    </header>
+
+    <main>
+        {% block content %}
+        
+        {% endblock content %}
+    </main>
+
+    <footer>
+        {% block footer %}
+            {% include "./partials/footer.html" %}
+        {% endblock footer %}
+    </footer>
+</body>
+</html>
