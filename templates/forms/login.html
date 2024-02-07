@@ -1,9 +1,9 @@
 {% extends "../layouts/base.html" %}
-
-{% block title %}Sigunp{% endblock title %}
+{% block title %}Login{% endblock title %}
 
 {% block content %}
-    <form action="{% url 'signup' %}" method="post">
+
+    <form action="{% url 'signin' %}" method="post">
 
         {% if messages %}
             <ul class="messages">
@@ -15,6 +15,7 @@
 
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value="registrarse">
+        <input type="submit" value="Ingresar">
     </form>
+
 {% endblock content %}

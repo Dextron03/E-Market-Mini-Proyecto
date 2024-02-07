@@ -35,7 +35,7 @@ class MyUser(AbstractBaseUser):
     # Campos adicionales para tu usuario
     name = models.CharField(max_length=75)
     surnames = models.CharField(max_length=100)
-    tel = models.IntegerField() 
+    tel = models.CharField(max_length=11) 
     
     objects = MyUserManager()
     
@@ -50,6 +50,5 @@ class MyUser(AbstractBaseUser):
     
     def has_module_perms(self, app_label):
         return self.is_superuser
-    
     
     
