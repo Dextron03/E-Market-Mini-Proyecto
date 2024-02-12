@@ -55,5 +55,33 @@ def signin(request):
             login(request, user)
             return redirect("home")
 
+@login_required
+def category_maintenance(request):
+    form_category = forms.CategoryForm()
+    if request.method == "GET":
+        return render(request, "forms/categoryform.html", {'form':form_category})
     
+    if request.method == "POST":
+        form_category = forms.CategoryForm(request.POST)
+        if form_category.is_valid():
+            form_category.save()
+            messages.success(request, message='La categoria a sido creada.')
+    
+    return render(request, "forms/categoryform.html", {'form':form_category})
+
+def commercial_maintenance(request):
+    form = forms.CommercialForm()
+    if request.method == "GET":
+        
+        return render(request, 'forms/commercial.html', {'form':form})
+    
+    if request.method == "POST":
+        form = forms.CommercialForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_commercial = form.save(commit=False)
+            new_commercial.user = request.user
+            new_commercial.save()
+        else:
+            form = forms.CommercialForm()
+    return render(request, 'forms/commercial.html', {'form':form})
     

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core import validators
 # Create your models here.
 
 class MyUserManager(BaseUserManager):
@@ -36,7 +37,6 @@ class MyUser(AbstractBaseUser):
     name = models.CharField(max_length=75)
     surnames = models.CharField(max_length=100)
     tel = models.CharField(max_length=11) 
-    
     objects = MyUserManager()
     
     USERNAME_FIELD = 'username'
@@ -50,5 +50,23 @@ class MyUser(AbstractBaseUser):
     
     def has_module_perms(self, app_label):
         return self.is_superuser
+    
+class Category(models.Model):
+    name_category = models.CharField(max_length=50, null=False, blank=False)
+    description = models.TextField(max_length= 1500, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name_category
+
+class Commercial(models.Model):
+    title = models.CharField(max_length=75, null=False, blank=False)
+    description = models.TextField(max_length=1500, blank=True, null=True)
+    img = models.ImageField(upload_to="media/", default="media/profile.jpg",null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    user = models.ForeignKey(MyUser, on_delete= models.CASCADE)
+    category = models.ForeignKey(Category, on_delete= models.CASCADE)
+    
+    def __str__(self) -> str:
+        return self.title
     
     

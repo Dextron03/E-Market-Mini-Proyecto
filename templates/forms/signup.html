@@ -1,20 +1,29 @@
 {% extends "../layouts/base.html" %}
 
-{% block title %}Sigunp{% endblock title %}
+{% block title %}Signup{% endblock title %}
 
 {% block content %}
-    <form action="{% url 'signup' %}" method="post">
-
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="registrarse">
-    </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Signup</div>
+                <div class="card-body">
+                    <form action="{% url 'signup' %}" method="post">
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% csrf_token %}
+                        {{form.as_p}}
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
