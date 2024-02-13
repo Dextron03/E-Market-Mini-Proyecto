@@ -61,12 +61,18 @@ class Category(models.Model):
 class Commercial(models.Model):
     title = models.CharField(max_length=75, null=False, blank=False)
     description = models.TextField(max_length=1500, blank=True, null=True)
-    img = models.ImageField(upload_to="media/", default="media/profile.jpg",null=True, blank=True)
+    img = models.ImageField(upload_to="portada/", default="portada/",null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    creation_date = models.DateField(auto_now_add=True, null=True, blank=True)
     user = models.ForeignKey(MyUser, on_delete= models.CASCADE)
     category = models.ForeignKey(Category, on_delete= models.CASCADE)
     
     def __str__(self) -> str:
         return self.title
     
-    
+class CommercialImage(models.Model):
+    commercial = models.ForeignKey(Commercial, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='commercial_images/', max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.commercial.title}"

@@ -1,0 +1,62 @@
+{% extends "./layouts/base.html" %}
+
+{% block head %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .carousel-item img {
+                max-height: 400px;
+                margin: auto;
+                
+            }
+
+        </style>
+{% endblock head %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Slider (Carousel) -->
+        <div class="col-md-8 offset-md-2">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for ads in query %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ ads.image.url }}" class="d-block w-100" alt="...">
+                        </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Siguiente</span>
+                </a>
+            </div>
+        </div>
+        <!-- Información del Anuncio -->
+        <div class="col-md-8 offset-md-2 mt-4">
+        {% for inf in info %}
+            <h2>{{ inf.title }}</h2>
+            <p><strong>Precio:</strong> ${{ inf.price }}</p>
+            <p><strong>Descripción:</strong> {{ inf.description }}</p>
+            <p><strong>Categoría:</strong> {{ inf.category }}</p>
+            <p><strong>Fecha de Publicación:</strong> {{ inf.creation_date }}</p>
+            <p><strong>Anunciante:</strong> {{ inf.user.username }}</p>
+            <p><strong>Correo Electrónico:</strong> {{ inf.user.email }}</p>
+            <p><strong>Teléfono:</strong> {{ inf.user.tel }}</p>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock scripts %}

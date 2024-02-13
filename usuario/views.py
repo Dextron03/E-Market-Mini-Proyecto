@@ -10,8 +10,17 @@ from . import models
 # Create your views here.
 @login_required
 def home(request):
+    User_logged = request.user
+    categorys = models.Category.objects.all()
+    user_ads = models.Commercial.objects.exclude(user=User_logged)
     
-    return render(request, "index.html", {})
+    # Obtiene todos los anuncios filtrados por categorías seleccionadas
+    if 'category' in request.GET:
+        selected_categories = request.GET.getlist('category')
+        user_ads = user_ads.filter(category__id__in=selected_categories)
+    
+    return render(request, "index.html", {'query': user_ads, 'categorys': categorys})
+
 
 def signup(request):
     form = forms.CustomUserCreationForm
@@ -69,19 +78,60 @@ def category_maintenance(request):
     
     return render(request, "forms/categoryform.html", {'form':form_category})
 
+@login_required
 def commercial_maintenance(request):
-    form = forms.CommercialForm()
-    if request.method == "GET":
-        
-        return render(request, 'forms/commercial.html', {'form':form})
-    
     if request.method == "POST":
-        form = forms.CommercialForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_commercial = form.save(commit=False)
-            new_commercial.user = request.user
-            new_commercial.save()
-        else:
-            form = forms.CommercialForm()
-    return render(request, 'forms/commercial.html', {'form':form})
+        title = request.POST["title"]
+        description = request.POST["description"]
+        images = request.FILES.getlist("img")  # Manejando múltiples imágenes
+        price = request.POST["price"]
+        category_id = request.POST["category"]
+
+        category = models.Category.objects.get(pk=category_id)
+
+        # Obtener el usuario actual, asumiendo que se está utilizando el sistema de autenticación de Django
+        user = request.user
+        
+        # Crear una nueva instancia de Commercial
+        new_commercial = models.Commercial.objects.create(
+            title=title,
+            description=description,
+            price=price,
+            img=images[0],
+            user=user,
+            category=category
+        )
+
+        # Guardar las imágenes adicionales
+        for img in images:
+            models.CommercialImage.objects.create(commercial=new_commercial, image=img)
+
+        # Redirigir al usuario a la página de inicio
+        return redirect('home')
+
+    return render(request, 'forms/commercial.html', {'options': models.Category.objects.all()})
+
+def details(request, id):
+    User_logged = request.user
+    ads = models.CommercialImage.objects.filter(commercial=id)
+    info_ads = models.Commercial.objects.filter(id=id)
+    return render(request, 'detalles.html', {'query':ads, 'info':info_ads})
+
+
+# def commercial_maintenance(request):
+    # form = forms.CommercialForm()
+    # if request.method == "GET":
+        
+    #     return render(request, 'forms/commercial.html', {'form':form})
+    
+    # if request.method == "POST":
+    #     form = forms.CommercialForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         new_commercial = form.save(commit=False)
+    #         new_commercial.user = request.user
+    #         new_commercial.save()
+    #         return redirect('home')
+    #     else:
+    #         form = forms.CommercialForm()
+    # return render(request, 'forms/commercial.html', {'options':models.Category.objects.all()})
     

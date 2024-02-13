@@ -11,7 +11,26 @@
             </ul>
         {% endif %}
         {% csrf_token %}
-        {{form.as_p}}
+
+        <label for="title">Titulo</label>
+        <input type="text" name="title" id="title">
+
+        <label for="description">Descripcion</label>
+        <textarea name="description" id="description" cols="30" rows="10"></textarea>
+
+        <label for="img">Imagenes</label>
+        <input type="file" name="img" id="img" multiple>
+
+        <label for="price">Precio</label>
+        <input type="number" name="price" id="price">
+
+        <label for="category">Categoria</label>
+        <select name="category" id="category">
+        {% for opts in options %}
+            <option value="{{ opts.id }}">{{ opts }}</option>
+        {% endfor %}
+        </select>
+
         <input type="submit" value="Agregar">
     </form>
 
