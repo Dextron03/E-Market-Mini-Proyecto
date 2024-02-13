@@ -12,32 +12,37 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}"> <i class="bi bi-house-fill"></i> Home</a>
+                        <a {% if request.path == '/' %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'home' %}"> <i class="bi bi-house-fill"></i> Home</a>
                     </li>
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'commercial' %}"> <i class="bi bi-receipt"></i> Anuncios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'category' %}"> <i class="bi bi-tags-fill"></i> Categorias</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}"> <i class="bi bi-door-open-fill"></i> Logout</a>
-                    </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'signup' %}">Signup</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'signin' %}">Signin</a>
-                        </li>
-                    {% endif %}
                     
-                    {% if user.is_authenticated %}
-                        <li class="nav-item mt-5">
-                            <a class="nav-link active" href="#">Bienvenido,<br> <i class="bi bi-person-circle"></i> {{ user.username }}</a>
-                        </li>
-                    {% endif %}  
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a {% if request.path == '/commercial/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'commercial' %}"> <i class="bi bi-receipt"></i> Anuncios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a {% if request.path == '/category/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'category' %}"> <i class="bi bi-tags-fill"></i> Categorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a {% if request.path == '/my_commercial/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'my_commercials' %}"> <i class="bi bi-archive-fill"></i> Mis anuncios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}"> <i class="bi bi-door-open-fill"></i> Logout</a>
+                            </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a {% if request.path == '/signup/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %}  href="{% url 'signup' %}">Signup</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a {% if request.path == '/signin/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'signin' %}">Signin</a>
+                                </li>
+                        {% endif %}
+                        
+                        {% if user.is_authenticated %}
+                            <li class="nav-item mt-5">
+                                <a class="nav-link active" href="#">Bienvenido,<br> <i class="bi bi-person-circle"></i> {{ user.username }}</a>
+                            </li>
+                        {% endif %}
+                                       
                 </ul>
             </div>
         </div>

@@ -45,11 +45,11 @@ class CustomUserCreationForm(UserCreationForm):
         return username
     
 class CommercialForm(forms.ModelForm):
-    pass
-    # img = forms.FileField(widget=forms.FileInput(attrs={'multiple': True}), required=False)
-    # class Meta:
-    #     model = models.Commercial
-    #     fields = ['title', 'description', 'img', 'price', 'category']
+    
+    class Meta:
+        model = models.Commercial
+        fields = "__all__"
+        exclude = ['user']
 
         
 

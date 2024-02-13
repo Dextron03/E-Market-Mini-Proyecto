@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from . import forms
 from . import models
 
@@ -11,6 +12,7 @@ from . import models
 @login_required
 def home(request):
     User_logged = request.user
+    current_path = request.path
     categorys = models.Category.objects.all()
     user_ads = models.Commercial.objects.exclude(user=User_logged)
     
@@ -80,6 +82,7 @@ def category_maintenance(request):
 
 @login_required
 def commercial_maintenance(request):
+    
     if request.method == "POST":
         title = request.POST["title"]
         description = request.POST["description"]
@@ -111,11 +114,44 @@ def commercial_maintenance(request):
 
     return render(request, 'forms/commercial.html', {'options': models.Category.objects.all()})
 
+@login_required
 def details(request, id):
-    User_logged = request.user
     ads = models.CommercialImage.objects.filter(commercial=id)
     info_ads = models.Commercial.objects.filter(id=id)
-    return render(request, 'detalles.html', {'query':ads, 'info':info_ads})
+    current_path = request.path
+    
+    return render(request, 'detalles.html', {'query':ads, 'info':info_ads, 'current_path':current_path})
+
+@login_required
+def my_commercials(request):
+    user = request.user
+    my_commercials = models.Commercial.objects.filter(user=user) 
+    return render(request, 'mis_anuncios.html', {"my_commercials":my_commercials})
+
+def delete_commercial(request, id):
+    try:
+        commercial_delete = models.Commercial.objects.get(id=id)
+        if request.method == "GET":
+            commercial_delete.delete()
+            messages.success(request, message='El anuncio ha sido eliminado.')
+            return redirect("my_commercials")
+    except ObjectDoesNotExist:
+        messages.error(request, message="Este anuncio no existe")
+    return redirect("my_commercials")
+
+@login_required
+def edit_commercial(request, commercial_id):
+    commercial = get_object_or_404(models.Commercial, pk=commercial_id)
+
+    if request.method == "POST":
+        form = forms.CommercialForm(request.POST, request.FILES, instance=commercial)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = forms.CommercialForm(instance=commercial)
+
+    return render(request, 'forms/edit_commercial.html', {'form': form, 'id':commercial_id})
 
 
 # def commercial_maintenance(request):

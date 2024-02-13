@@ -1,0 +1,60 @@
+{% extends "./layouts/base.html" %}
+
+{% block title %}Mis anuncios{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col">
+            <a href="{% url 'commercial' %}" class="btn btn-primary">Crear Anuncio Nuevo</a>
+        </div>
+    </div>
+    <div class="row">
+        {% if my_commercials|length == 0 %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            No se encuentran anuncios. <strong>Te invitamos a crear un nuevo anuncion.</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% else %}
+            {% for my_commercial in my_commercials %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <img src="{{ my_commercial.img.url }}" class="card-img-top" alt="{{ my_commercial.title }}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ my_commercial.title }}</h5>
+                            <p class="card-text">Descripción: {{ my_commercial.description }}</p>
+                            <p class="card-text">Precio: ${{ my_commercial.price }}</p>
+                            <p class="card-text">Categoría: {{ my_commercial.category }}</p>
+                            <a href="{% url 'edit_commercial' my_commercial.id %}" class="btn btn-primary">Editar</a>
+                            {% comment %}  Button trigger modal  {% endcomment %}
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{my_commercial.id}}">Eliminar</button>
+                        
+                            {% comment %}  Modal  {% endcomment %}
+                            <div class="modal fade" id="staticBackdrop{{my_commercial.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Anuncio</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    ¿Está seguro que desea eliminar este anuncio {{my_commercial}}?
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <a type="button" href="{% url 'delete_commercial' id=my_commercial.id %}" class="btn btn-primary">Aceptar</a>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}    
+    </div>
+</div>
+
+{% endblock content %}
