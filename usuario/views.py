@@ -137,7 +137,7 @@ def delete_commercial(request, id):
         commercial_delete = models.Commercial.objects.get(id=id)
         if request.method == "GET":
             commercial_delete.delete()
-            messages.success(request, message='<div class="alert alert-success alert-dismissible fade show messages" role="alert"> El anuncio ha sido eliminado.  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>')
+            messages.success(request, message=format_html('<div class="alert alert-success alert-dismissible fade show messages" role="alert"> El anuncio ha sido eliminado.  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'))
             return redirect("my_commercials")
     except ObjectDoesNotExist:
         messages.error(request, message=format_html('<div class="alert alert-danger alert-dismissible fade show messages" role="alert"> Este anuncio no existe  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'))

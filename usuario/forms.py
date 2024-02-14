@@ -45,14 +45,26 @@ class CustomUserCreationForm(UserCreationForm):
         
         return username
     
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if models.MyUser.objects.filter(email=email).exists():
+            raise forms.ValidationError('Este correo electrónico ya está registrado.')
+        return email
+    
 class CommercialForm(forms.ModelForm):
+    img = forms.FileField(validators=[validators.FileExtensionValidator(["png", "jpg", "jpeg"], message='Solo puedes usar extensiones validas. (png, jpg, jpeg)')])
     
     class Meta:
         model = models.Commercial
         fields = "__all__"
         exclude = ['user']
 
-        
+    def clean_img(self):
+        files = self.cleaned_data.get('img')
+        if not files:
+            raise forms.ValidationError("Por favor, selecciona al menos un archivo.")
+        return files
+    
 
 class CategoryForm(forms.ModelForm):
     name_category = forms.CharField(max_length=50, label="Nombre de la categorias", widget=forms.TextInput(attrs={"class":"form-control"}))
