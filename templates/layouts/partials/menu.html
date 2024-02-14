@@ -20,7 +20,10 @@
                                 <a {% if request.path == '/commercial/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'commercial' %}"> <i class="bi bi-receipt"></i> Anuncios</a>
                             </li>
                             <li class="nav-item">
-                                <a {% if request.path == '/category/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'category' %}"> <i class="bi bi-tags-fill"></i> Categorias</a>
+                                <a {% if request.path == '/category/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'category_maintenance' %}"> <i class="bi bi-tags-fill"></i> Categorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a {% if request.path == '/category/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'category' %}"> <i class="bi bi-list-ul"></i> Lista de Categorias</a>
                             </li>
                             <li class="nav-item">
                                 <a {% if request.path == '/my_commercial/'  %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %} href="{% url 'my_commercials' %}"> <i class="bi bi-archive-fill"></i> Mis anuncios</a>

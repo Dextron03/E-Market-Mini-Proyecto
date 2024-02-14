@@ -1,37 +1,61 @@
 {% extends "../layouts/base.html" %}
 {% block title %}Anuncios{% endblock title %}
 
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_form_commercial.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+{% endblock head %}
+
 {% block content %}
-    <form action="{% url 'commercial' %}" method="post" enctype="multipart/form-data">
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% csrf_token %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="page-title">Publica tu Anuncio</h2>
+                <p class="page-description">Completa el formulario a continuación para agregar un nuevo anuncio a nuestra plataforma.</p>
+                <form action="{% url 'commercial' %}" method="post" enctype="multipart/form-data" class="my-form">
+                    {% if messages %}
+                        <div class="alert alert-warning alert-dismissible fade show messages" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %} 
+                    {% csrf_token %}
 
-        <label for="title">Titulo</label>
-        <input type="text" name="title" id="title">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Título</label>
+                        <input type="text" name="title" id="title" class="form-control">
+                    </div>
 
-        <label for="description">Descripcion</label>
-        <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descripción</label>
+                        <textarea name="description" id="description" class="form-control" rows="5"></textarea>
+                    </div>
 
-        <label for="img">Imagenes</label>
-        <input type="file" name="img" id="img" multiple>
+                    <div class="mb-3">
+                        <label for="img" class="form-label">Imágenes</label>
+                        <input type="file" name="img" id="img" class="form-control" multiple>
+                    </div>
 
-        <label for="price">Precio</label>
-        <input type="number" name="price" id="price">
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Precio</label>
+                        <input type="number" name="price" id="price" class="form-control">
+                    </div>
 
-        <label for="category">Categoria</label>
-        <select name="category" id="category">
-        {% for opts in options %}
-            <option value="{{ opts.id }}">{{ opts }}</option>
-        {% endfor %}
-        </select>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Categoría</label>
+                        <select name="category" id="category" class="form-select">
+                            {% for opts in options %}
+                                <option value="{{ opts.id }}">{{ opts }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-        <input type="submit" value="Agregar">
-    </form>
-
+                    <input type="submit" value="Agregar" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

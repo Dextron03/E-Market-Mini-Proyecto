@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.db.models import Count
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.html import format_html
 from . import forms
 from . import models
 
@@ -76,8 +78,9 @@ def category_maintenance(request):
         form_category = forms.CategoryForm(request.POST)
         if form_category.is_valid():
             form_category.save()
-            messages.success(request, message='La categoria a sido creada.')
-    
+            messages.success(request, message=format_html('<div class="alert alert-success alert-dismissible fade show messages" role="alert"> La categoria a sido creada. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'))
+        else:
+            messages.error(request, message=format_html('<div class="alert alert-danger alert-dismissible fade show messages" role="alert"> Algo a salido mal. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'))
     return render(request, "forms/categoryform.html", {'form':form_category})
 
 @login_required
@@ -128,30 +131,68 @@ def my_commercials(request):
     my_commercials = models.Commercial.objects.filter(user=user) 
     return render(request, 'mis_anuncios.html', {"my_commercials":my_commercials})
 
+@login_required
 def delete_commercial(request, id):
     try:
         commercial_delete = models.Commercial.objects.get(id=id)
         if request.method == "GET":
             commercial_delete.delete()
-            messages.success(request, message='El anuncio ha sido eliminado.')
+            messages.success(request, message='<div class="alert alert-success alert-dismissible fade show messages" role="alert"> El anuncio ha sido eliminado.  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>')
             return redirect("my_commercials")
     except ObjectDoesNotExist:
-        messages.error(request, message="Este anuncio no existe")
+        messages.error(request, message=format_html('<div class="alert alert-danger alert-dismissible fade show messages" role="alert"> Este anuncio no existe  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'))
     return redirect("my_commercials")
 
 @login_required
-def edit_commercial(request, commercial_id):
-    commercial = get_object_or_404(models.Commercial, pk=commercial_id)
+def edit_commercial(request, id):
+    commercial = get_object_or_404(models.Commercial, pk=id)
 
     if request.method == "POST":
         form = forms.CommercialForm(request.POST, request.FILES, instance=commercial)
         if form.is_valid():
             form.save()
+            messages.success(request, message=format_html('<div class="alert alert-success alert-dismissible fade show" role="alert"> El anuncio se a actulizado con exito. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> </div>'))
             return redirect('home')
+        else:
+            messages.error(message=format_html('<div class="alert alert-warning alert-dismissible fade show" role="alert"> Algo a salido mal   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> </div>'))
+            return render(request, 'forms/edit_commercial.html', {'form': form, 'id':id}) 
     else:
         form = forms.CommercialForm(instance=commercial)
+        return render(request, 'forms/edit_commercial.html', {'form': form, 'id':id}) 
 
-    return render(request, 'forms/edit_commercial.html', {'form': form, 'id':commercial_id})
+@login_required
+def list_categorys(request):
+    categories = models.Category.objects.annotate(
+        total_ads=Count('commercial'),
+        total_users=Count('commercial__user', distinct=True)
+        )
+    return render(request, 'list_categorias.html', {'categories':categories})
+
+@login_required
+def delete_category(request, id):
+    try:
+        category_delete = models.Category.objects.get(id=id)
+        if request.method == "GET":
+            category_delete.delete()
+            messages.success(request, message='La categoria ha sido eliminado.')
+            return redirect("category")
+    except ObjectDoesNotExist:
+        messages.error(request, message="Este anuncio no existe")
+    return redirect("category")
+
+@login_required
+def edit_category(request, id):
+    category = get_object_or_404(models.Category, pk=id)
+
+    if request.method == "POST":
+        form = forms.CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('category')
+    else:
+        form = forms.CategoryForm(instance=category)
+
+    return render(request, 'forms/edit_categoryform.html', {'form': form, 'id':id})
 
 
 # def commercial_maintenance(request):

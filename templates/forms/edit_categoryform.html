@@ -1,0 +1,39 @@
+{% extends "../layouts/base.html" %}
+{% block title %}Editar Categorias{% endblock title %}
+
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_form_categoria.css' %}">
+{% endblock head %} 
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">Editar Categoría</h2>
+                <p class="text-center">En esta página puedes editar la información de la categoría seleccionada.</p>
+                <form action="{% url 'edit_category' id=id %}" method="post" class="my-form">
+                    {% if messages %}
+                        <div class="alert alert-warning alert-dismissible fade show messages" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name_category.label_tag }}
+                        {{ form.name_category }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                    </div>
+                    <input type="submit" value="Guardar Cambios" class="btn btn-primary">
+                </form>
+                <a href="{% url 'category' %}" class="btn btn-secondary mt-3">Volver Atrás</a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

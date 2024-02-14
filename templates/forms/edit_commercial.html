@@ -1,13 +1,25 @@
 {% extends "../layouts/base.html" %}
 
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_form_commercial.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+{% endblock head %}
+
 {% block title %}Edit-Comercial{% endblock title %}
 
 {% block content %}
-
-    <form action="{% url 'edit_commercial' id %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Actualizar">
-    </form>
-
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="page-title">Edita tu Anuncio</h2>
+            <p class="page-description">Completa el formulario a continuación para editar tu anuncio en nuestra plataforma.</p>
+            <form action="{% url 'edit_commercial' id %}" method="post" enctype="multipart/form-data" class="my-form">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Actualizar" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}

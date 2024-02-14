@@ -11,11 +11,22 @@
         </div>
     </div>
     <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+
         {% if my_commercials|length == 0 %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            No se encuentran anuncios. <strong>Te invitamos a crear un nuevo anuncion.</strong>
+            No se encuentran anuncios. <strong>Te invitamos a crear un nuevo anuncio.</strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
+          <div class="text-center mt-4">
+            <p>No tienes ningún anuncio creado.</p>
+            <p>Crea un nuevo anuncio haciendo clic en el botón de abajo.</p>
+            <a href="{% url 'commercial' %}" class="btn btn-primary">Crear Anuncio Nuevo</a>
+        </div>
         {% else %}
             {% for my_commercial in my_commercials %}
                 <div class="col-md-6 mb-4">
@@ -26,7 +37,7 @@
                             <p class="card-text">Descripción: {{ my_commercial.description }}</p>
                             <p class="card-text">Precio: ${{ my_commercial.price }}</p>
                             <p class="card-text">Categoría: {{ my_commercial.category }}</p>
-                            <a href="{% url 'edit_commercial' my_commercial.id %}" class="btn btn-primary">Editar</a>
+                            <a href="{% url 'edit_commercial' id=my_commercial.id %}" class="btn btn-primary">Editar</a>
                             {% comment %}  Button trigger modal  {% endcomment %}
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{my_commercial.id}}">Eliminar</button>
                         

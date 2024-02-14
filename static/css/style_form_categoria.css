@@ -1,0 +1,13 @@
+.my-form {
+    background-color: #f8f9fa; /* Color de fondo del formulario */
+    padding: 20px; /* Espacio interno del formulario */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.my-form .mb-3 {
+    margin-bottom: 20px; /* Espacio entre los elementos del formulario */
+}
+
+.my-form input[type="submit"] {
+    width: 100%; /* Ancho completo del botón */
+}

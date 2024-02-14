@@ -2,16 +2,17 @@ from django import forms
 from . import models
 from django.utils.html import format_html
 from django.contrib.auth.forms import UserCreationForm
+from django.core import validators
 
 class CustomUserCreationForm(UserCreationForm):
     # Agregar campos adicionales aquí
-    username = forms.CharField(label='Nombre de usuario', widget=forms.TextInput(attrs={"class":"form-control"}))
-    name = forms.CharField(max_length=30, label='Nombre', widget=forms.TextInput(attrs={"class":"form-control"}))
-    surnames = forms.CharField(max_length=30, label='Apellidos', widget=forms.TextInput(attrs={"class":"form-control"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class":"form-control"}))
-    tel = forms.CharField(max_length=11, label='Telefono/celular:', widget=forms.TextInput(attrs={"class":"form-control"}))
-    password1 = forms.CharField(max_length=18, label="Contraseña", widget= forms.PasswordInput(attrs={"class":"form-control"}))
-    password2 = forms.CharField(max_length=18, label="Confirmar contraseña", widget= forms.PasswordInput(attrs={"class":"form-control"}))
+    username = forms.CharField(label='Nombre de usuario', widget=forms.TextInput(attrs={"class":"form-control form-control-lg mb-4"}))
+    name = forms.CharField(max_length=30, label='Nombre', widget=forms.TextInput(attrs={"class":"form-control form-control-lg mb-4"}))
+    surnames = forms.CharField(max_length=30, label='Apellidos', widget=forms.TextInput(attrs={"class":"form-control form-control-lg mb-4"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class":"form-control form-control-lg mb-4"}))
+    tel = forms.CharField(max_length=11, label='Telefono/celular:', widget=forms.TextInput(attrs={"class":"form-control form-control-lg mb-4"}))
+    password1 = forms.CharField(max_length=18, label="Contraseña", widget= forms.PasswordInput(attrs={"class":"form-control form-control-lg mb-4"}))
+    password2 = forms.CharField(max_length=18, label="Confirmar contraseña", widget= forms.PasswordInput(attrs={"class":"form-control form-control-lg mb-4"}))
 
     class Meta:
         model = models.MyUser

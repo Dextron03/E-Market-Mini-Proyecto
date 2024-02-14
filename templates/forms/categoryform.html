@@ -1,18 +1,46 @@
 {% extends "../layouts/base.html" %}
 {% block title %}Categorias{% endblock title %}
 
-{% block content %}
-    <form action="{% url 'category' %}" method="post">
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Agregar">
-    </form>
 
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_form_categoria.css' %}">
+{% endblock head %} 
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">Administrar Categorías</h2>
+                <p class="text-center">En esta página puedes agregar nuevas categorías para organizar tus anuncios.</p>
+                <form action="{% url 'category_maintenance' %}" method="post" class="my-form">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show messages" role="alert">
+                                {{ error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name_category.label_tag }}
+                        {{ form.name_category }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                    </div>
+                    <input type="submit" value="Agregar" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

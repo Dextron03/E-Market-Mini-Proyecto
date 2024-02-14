@@ -1,21 +1,36 @@
 {% extends "../layouts/base.html" %}
 {% block title %}Login{% endblock title %}
 
+
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_login.css' %}">
+{% endblock head %}
+    
+
 {% block content %}
-
-    <form action="{% url 'signin' %}" method="post">
-
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Ingresar">
-    </form>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-md-6 login-form">
+            <h2 class="mb-4">¡Bienvenido!</h2>
+            <p>Por favor, inicia sesión para acceder a tu cuenta.</p>
+            <form action="{% url 'signin' %}" method="post">
+                {% if messages %}
+                    <div class="alert alert-warning alert-dismissible fade show messages" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+                {% csrf_token %}
+                <input type="text" name="username" class="form-control form-control-lg mb-4" placeholder="Usuario">
+                <input type="password" name="password" class="form-control form-control-lg mb-4" placeholder="Contraseña">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Ingresar</button>
+                <p class="mt-3">¿No tienes una cuenta? <a href="{% url 'signup' %}" class="text-primary">Regístrate aquí</a></p>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

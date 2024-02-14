@@ -6,7 +6,13 @@
     <div class="row">
         <div class="col-md-9">
             <div class="card-deck">
-                {% for ads in query %}
+                {% if query|length == 0 %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>No existen anuncios</strong> Por favor, crea alguno.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% else %}
+                    {% for ads in query %}
                     <a href="{% url 'details' id=ads.id %}" class="text-decoration-none">
                         <div class="card mb-4">
                             <img src="{{ads.img.url}}" class="card-img-top" alt="{{ads.title}}" style="height: 300px; object-fit: cover;">
@@ -21,20 +27,34 @@
                             </div>
                         </div>
                     </a>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </div>
+            {% if query|length == 0 %}
+            <div class="text-center mt-4">
+                <p class="text-muted">¿Quieres ser el primero en publicar un anuncio?</p>
+                <a href="{% url 'commercial' %}" class="btn btn-primary">Crear anuncio</a>
+            </div>
+            {% endif %}
         </div>
         {% comment %}  Filtro de checkboxes  {% endcomment %}
         <div class="col-md-3">
             <h5>Filtrar por:</h5>
             <form action="{% url 'home' %}" method="GET">
+                {% if categorys|length == 0 %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>No hay categorías en uso.</strong> Por favor, crea alguna.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% else %}
                 {% for info_cat in categorys %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="category" value="{{ info_cat.id }}" id="commercial{{ info_cat.id }}">
-                    <label class="form-check-label" for="category{{ info_cat.id }}">{{ info_cat.name_category }}</label>
-                </div>
-                {% endfor %}
-                <input type="submit" class="btn btn-primary mt-3" name="btn-check" value="Buscar">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="category" value="{{ info_cat.id }}" id="commercial{{ info_cat.id }}">
+                        <label class="form-check-label" for="category{{ info_cat.id }}">{{ info_cat.name_category }}</label>
+                    </div>
+                    {% endfor %}
+                    <input type="submit" class="btn btn-primary mt-3" name="btn-check" value="Buscar">
+                {% endif %}
             </form>
         </div>
     </div>
