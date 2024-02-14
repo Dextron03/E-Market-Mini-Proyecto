@@ -113,9 +113,9 @@ def commercial_maintenance(request):
             models.CommercialImage.objects.create(commercial=new_commercial, image=img)
 
         # Redirigir al usuario a la página de inicio
-        return redirect('home')
-
-    return render(request, 'forms/commercial.html', {'options': models.Category.objects.all()})
+        return redirect('my_commercials')
+    else:
+        return render(request, 'forms/commercial.html', {'options': models.Category.objects.all()})
 
 @login_required
 def details(request, id):
@@ -191,8 +191,7 @@ def edit_category(request, id):
             return redirect('category')
     else:
         form = forms.CategoryForm(instance=category)
-
-    return render(request, 'forms/edit_categoryform.html', {'form': form, 'id':id})
+        return render(request, 'forms/edit_categoryform.html', {'form': form, 'id':id})
 
 
 # def commercial_maintenance(request):
